@@ -28,24 +28,4 @@ public class BaseEntity {
     @Column(name = "MODIFIED_DATE")
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm")
     private OffsetDateTime modifiedDate;
-//
-//    public boolean isNew() {
-//        return this.id == null;
-//    }
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public OffsetDateTime getModifiedDate() {
-//        return modifiedDate;
-//    }
-//
-//    public void setModifiedDate(OffsetDateTime modifiedDate) {
-//        this.modifiedDate = modifiedDate;
-//    }
 }

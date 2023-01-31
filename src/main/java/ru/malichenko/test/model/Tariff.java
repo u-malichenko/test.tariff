@@ -1,5 +1,4 @@
 package ru.malichenko.test.model;
-//        - Название. Обязательное, уникальное в рамках всех не удаленных тарифов, <= 128 символов.
 
 import lombok.*;
 
@@ -10,14 +9,12 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
 @Table(name = "demo_tariff")
-//,uniqueConstraints = {@UniqueConstraint(name = "UniqueTitleAndRemoved", columnNames = {"title", "removed"})})
 public class Tariff extends BaseEntity {
 
     @NotEmpty(message = "Title may not be empty")
@@ -36,30 +33,6 @@ public class Tariff extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    final private List<PackageOfServices> packageOfServices = new ArrayList<>();
+    private List<PackageOfServices> packageOfServices = new ArrayList<>();
 
-//    @Override
-//    public boolean isNew() {
-//        return super.isNew();
-//    }
-//
-//    @Override
-//    public Long getId() {
-//        return super.getId();
-//    }
-//
-//    @Override
-//    public void setId(Long id) {
-//        super.setId(id);
-//    }
-//
-//    @Override
-//    public OffsetDateTime getModifiedDate() {
-//        return super.getModifiedDate();
-//    }
-//
-//    @Override
-//    public void setModifiedDate(OffsetDateTime modifiedDate) {
-//        super.setModifiedDate(modifiedDate);
-//    }
 }

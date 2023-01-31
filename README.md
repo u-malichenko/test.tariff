@@ -1,83 +1,93 @@
-# tariff Project
+
+# Tariff Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+DB генерируется Flyway, ограничения реализованы как со стороны Entity так и со стороны DB 
 
-## Running the application in dev mode
+Название Тарифа. Обязательное, уникальное в рамках всех не удаленных тарифов - реализовано при помощи уникальных индексов в одной из миграций flyway
 
-You can run your application in dev mode that enables live coding using:
+Две таблицы в БД объединены связью 1 Тариф Многие Пакеты по tarif_id
 
-```shell script
-./gradlew quarkusDev
-```
+Изначально разрабатывалась REST версия - http://localhost/tariffs
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+Но позже решил попробовать что же такое GraphQL и основное api тут  http://localhost/graphql/schema.graphql
 
-## Packaging and running the application
-
-The application can be packaged using:
-
-```shell script
+# Docker command
+The application can be packaged:
 ./gradlew build
-```
 
-It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
+Create a Docker container that runs the application in JVM mode:
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/tariff-jvm .
 
-The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
+Create and run DB container:
+docker run --name tariff-db-dev -p 5433:5432 -e POSTGRES_DB=tariff-dev -e POSTGRES_USER=tariff-dev -e POSTGRES_PASSWORD=tariff-dev -d postgres:alpine
 
-If you want to build an _über-jar_, execute the following command:
+Run the container with a link do the Postgres database container and override the datasource url with environment variable:
+docker run -i --rm -p 80:80 --link tariff-db-dev -e QUARKUS_DATASOURCE_JDBC_URL='jdbc:postgresql://tariff-db-dev/postgres' quarkus/tariff-jvm
 
-```shell script
-./gradlew build -Dquarkus.package.type=uber-jar
-```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
+# GraphQL query example
 
-## Creating a native executable
+http://localhost/q/graphql-ui
 
-You can create a native executable using:
+http://localhost/graphql/schema.graphql
 
-```shell script
-./gradlew build -Dquarkus.package.type=native
-```
+query tariffs {
+tariffsByCategoryAndValue(categoryType: VOICE, value: -1)
+{
+id
+title
+isRemoved
+isArchived
+createDate
+packageOfServicesDto
+{
+title
+id
+value
+isRemoved
+}
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+}
+}
 
-```shell script
-./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
-```
+query tariffs {
+tariffsByUnlimitedInternet
+{
+id
+title
+isRemoved
+isArchived
+createDate
+packageOfServicesDto
+{
+title
+id
+value
+isRemoved
+}
 
-You can then execute your native executable with: `./build/tariff-1.0-SNAPSHOT-runner`
+}
+}
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
+query tariffs {
+tariffsWithPartialMatchTitle(partialTitle: "ul")
+{
+id
+title
+isRemoved
+isArchived
+createDate
+packageOfServicesDto
+{
+title
+id
+value
+isRemoved
+}
 
-## Related Guides
+}
+}
 
-- REST resources for Hibernate ORM with Panache ([guide](https://quarkus.io/guides/rest-data-panache)): Generate JAX-RS
-  resources for your Hibernate Panache entities and repositories
-- Flyway ([guide](https://quarkus.io/guides/flyway)): Handle your database schema migrations
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and
-  method parameters for your beans (REST, CDI, JPA)
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes
-  with Swagger UI
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code
-  for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+По всем вопросам пишите, буду рад ответить..

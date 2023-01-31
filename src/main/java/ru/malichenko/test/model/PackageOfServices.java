@@ -1,8 +1,12 @@
 package ru.malichenko.test.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import ru.malichenko.test.enums.CategoryType;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -32,34 +36,10 @@ public class PackageOfServices extends BaseEntity {
 
     @NotEmpty(message = "Field removed may not be empty")
     @Column(name = "REMOVED", nullable = false , columnDefinition = "boolean default false")
-    private Boolean removed;
+    private Boolean isRemoved;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "TARIFF_ID", nullable = false)
     private Tariff tariff;
-
-//    @Override
-//    public boolean isNew() {
-//        return super.isNew();
-//    }
-//
-//    @Override
-//    public Long getId() {
-//        return super.getId();
-//    }
-//
-//    @Override
-//    public void setId(Long id) {
-//        super.setId(id);
-//    }
-//
-//    @Override
-//    public OffsetDateTime getModifiedDate() {
-//        return super.getModifiedDate();
-//    }
-//
-//    @Override
-//    public void setModifiedDate(OffsetDateTime modifiedDate) {
-//        super.setModifiedDate(modifiedDate);
-//    }
 }
