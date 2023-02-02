@@ -9,10 +9,9 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "demo_tariff")
 public class Tariff extends BaseEntity {

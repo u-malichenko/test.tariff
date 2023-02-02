@@ -12,10 +12,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper=true)
 @Entity
 @Table(name = "demo_package_of_services")
 public class PackageOfServices extends BaseEntity {
@@ -39,7 +38,7 @@ public class PackageOfServices extends BaseEntity {
     private Boolean isRemoved;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TARIFF_ID", nullable = false)
     private Tariff tariff;
 }

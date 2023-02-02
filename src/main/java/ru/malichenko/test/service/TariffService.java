@@ -3,6 +3,7 @@ package ru.malichenko.test.service;
 import io.quarkus.panache.common.Page;
 import ru.malichenko.test.dto.TariffDto;
 import ru.malichenko.test.enums.CategoryType;
+import ru.malichenko.test.filter.TariffFilter;
 import ru.malichenko.test.mapper.TariffMapper;
 import ru.malichenko.test.model.PageRequest;
 import ru.malichenko.test.model.Tariff;
@@ -58,6 +59,11 @@ public class TariffService {
     }
 
     @Transactional
+    public List<TariffDto> findByCategoryAndValueWithCriteria(CategoryType categoryType, long value) {
+        return tariffMapper.toDtoList(tariffRepository.findByCategoryAndValueWithCriteria(categoryType, value));
+    }
+
+    @Transactional
     public List<TariffDto> getWithUnlimitedVoice() {
         return tariffMapper.toDtoList(tariffRepository.findByPockedCategoryAndValue(CategoryType.VOICE, UNLIMITED));
     }
@@ -81,7 +87,7 @@ public class TariffService {
     }
 
     @Transactional
-    public TariffDto update(Long id, TariffDto tariffDto) {
+    public TariffDto updateById(Long id, TariffDto tariffDto) {
         Tariff entity = tariffRepository.findById(id);
         if (entity == null) {
             throw new WebApplicationException("Tariff with id of " + id + " does not exist.", 404);
@@ -113,5 +119,17 @@ public class TariffService {
 
     public List<TariffDto> getWithPartialMatchTitle(String partialTitle) {
         return tariffMapper.toDtoList(tariffRepository.findWithPartialMatchTitle(partialTitle));
+    }
+
+    public List<TariffDto> findByCriteria(TariffFilter filter) {
+       return tariffMapper.toDtoList(tariffRepository.findByCriteria(filter));
+    }
+
+    public TariffDto findByIdWithCriteria(long id) {
+        return tariffMapper.toDto(tariffRepository.findByIdWithCriteria(id));
+    }
+
+    public List<TariffDto> findAllByCriteria() {
+        return tariffMapper.toDtoList(tariffRepository.findAllByCriteria());
     }
 }

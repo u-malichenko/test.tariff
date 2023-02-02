@@ -1,17 +1,12 @@
 package ru.malichenko.test.dto;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.malichenko.test.enums.CategoryType;
 
 import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
 @RegisterForReflection
 public class PackageOfServicesDto {

@@ -56,9 +56,9 @@ public class PackageOfServicesService {
     }
 
     @Transactional
-    public PackageOfServicesDto create(PackageOfServicesDto packageOfServicesDto, long tariffId) {
+    public PackageOfServicesDto create(PackageOfServicesDto packageOfServicesDto) {
         PackageOfServices entity = packageOfServicesMapper.toEntity(packageOfServicesDto);
-        entity.setTariff(tariffRepository.findByIdOptional(tariffId).orElseThrow(NotFoundException::new));
+        entity.setTariff(tariffRepository.findByIdOptional(packageOfServicesDto.getTariffId()).orElse(null));
         packageOfServicesRepository.persistAndFlush(entity);
         if (packageOfServicesRepository.isPersistent(entity)) {
             Optional<PackageOfServices> optionalEmp = packageOfServicesRepository.findByIdOptional(entity.getId());
@@ -70,7 +70,7 @@ public class PackageOfServicesService {
     }
 
     @Transactional
-    public PackageOfServicesDto update(Long id, PackageOfServicesDto packageOfServicesDto) {
+    public PackageOfServicesDto updateById(Long id, PackageOfServicesDto packageOfServicesDto) {
         PackageOfServices entity = packageOfServicesRepository.findById(id);
         if (entity == null) {
             throw new WebApplicationException("PackageOfServices with id of " + id + " does not exist.", 404);

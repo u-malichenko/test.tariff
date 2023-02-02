@@ -5,8 +5,7 @@ import lombok.*;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class PageRequest {
@@ -18,20 +17,4 @@ public class PageRequest {
     @QueryParam("pageSize")
     @DefaultValue("10")
     private int pageSize;
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
 }

@@ -8,10 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
 @MappedSuperclass
 public class BaseEntity {
     @Id

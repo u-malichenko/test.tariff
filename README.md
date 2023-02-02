@@ -13,6 +13,8 @@ DB генерируется Flyway, ограничения реализован�
 
 Но позже решил попробовать что же такое GraphQL и основное api тут  http://localhost/graphql/schema.graphql
 
+Добавил фильтр Criteria
+
 # Docker command
 The application can be packaged:
 ./gradlew build
@@ -32,6 +34,44 @@ docker run -i --rm -p 80:80 --link tariff-db-dev -e QUARKUS_DATASOURCE_JDBC_URL=
 http://localhost/q/graphql-ui
 
 http://localhost/graphql/schema.graphql
+
+query {
+all
+{
+id
+title
+isRemoved
+isArchived
+createDate
+packageOfServicesDto
+{
+title
+id
+value
+isRemoved
+}
+
+}
+}
+
+query {
+byId(id: 1)
+{
+id
+title
+isRemoved
+isArchived
+createDate
+packageOfServicesDto
+{
+title
+id
+value
+isRemoved
+}
+
+}
+}
 
 query tariffs {
 tariffsByCategoryAndValue(categoryType: VOICE, value: -1)
@@ -89,5 +129,30 @@ isRemoved
 
 }
 }
+
+query filter {
+TariffWithFilter(filter: {
+isArchived: {
+operator: "is"
+value: "false"
+}
+})
+{
+id
+title
+isRemoved
+isArchived
+createDate
+packageOfServicesDto
+{
+title
+id
+value
+isRemoved
+}
+
+}
+}
+
 
 По всем вопросам пишите, буду рад ответить..
