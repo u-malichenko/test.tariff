@@ -68,7 +68,7 @@ public class TariffRepository implements PanacheRepository<Tariff> {
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
-    public List<Tariff> findByCategoryAndValueWithCriteria(CategoryType categoryType, long value) throws ClassNotFoundException {
+    public List<Tariff> findByCategoryAndValueWithCriteria(CategoryType categoryType, long value) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Tariff> criteriaQueryTariff = criteriaBuilder.createQuery(Tariff.class);
